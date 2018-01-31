@@ -12,8 +12,6 @@
 """
 
 import ev3dev.ev3 as ev3
-import math
-import time
 
 
 class Snatch3r(object):
@@ -30,23 +28,13 @@ class Snatch3r(object):
     def drive_inches(self, inches_target, speed_deg_per_second):
         degrees_per_inch = 90
         motor_turns_needed_in_degrees = inches_target * degrees_per_inch
-        self.left_motor.run_to_rel_pos(position_sp=motor_turns_needed_in_degrees,speed_sp=speed_deg_per_second)
-        self.right_motor.run_to_rel_pos(position_sp=motor_turns_needed_in_degrees,speed_sp=speed_deg_per_second)
+        self.left_motor.run_to_rel_pos(position_sp=motor_turns_needed_in_degrees, speed_sp=speed_deg_per_second)
+        self.right_motor.run_to_rel_pos(position_sp=motor_turns_needed_in_degrees, speed_sp=speed_deg_per_second)
         self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
         self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
 
     def turn_degrees(self, degrees_to_turn, turn_speed_sp):
-
-        if degrees_to_turn > 0:
-
-            self.right_motor.run_to_rel_pos(position_sp=degrees_to_turn * 5, speed_sp =turn_speed_sp )
-            self.left_motor.run_to_rel_pos(position_sp=-degrees_to_turn * 5, speed_sp =turn_speed_sp )
-            self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
-            self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
-
-        if degrees_to_turn < 0:
-            self.right_motor.run_to_rel_pos(position_sp=-degrees_to_turn * 5, speed_sp=turn_speed_sp)
-            self.left_motor.run_to_rel_pos(position_sp=degrees_to_turn * 5, speed_sp=turn_speed_sp)
-            self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
-            self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
-
+        self.right_motor.run_to_rel_pos(position_sp=degrees_to_turn * 5, speed_sp=turn_speed_sp)
+        self.left_motor.run_to_rel_pos(position_sp=-degrees_to_turn * 5, speed_sp=turn_speed_sp)
+        self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
+        self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
