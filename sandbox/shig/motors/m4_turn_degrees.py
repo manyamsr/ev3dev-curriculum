@@ -29,6 +29,7 @@ def main():
     print("Goodbye!")
     ev3.Sound.speak("Goodbye").wait()
 
+main()
 # TODO: 2. Copy the contents of m3_drive_inches_via_library.py and paste that text into this file below these comments.
 #   Change the initial print and speak commands to reflect this module, like this...
 #     print("--------------------------------------------")
