@@ -3,10 +3,10 @@
 This module lets you practice using the buttons on the EV3 as states.
 
 Normally we'll use event callbacks with buttons, but this example uses buttons as states for the purposes of example.
-Much like we did in manyamsr of the motors unit, later we will show you different (better) ways to use buttons.
+Much like we did in m1 of the motors unit, later we will show you different (better) ways to use buttons.
 
-Authors: David Fisher and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher and Sreekar Manyam.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 # TODO: 2. Have someone on your team run this program as is on the EV3 and make sure everyone understands the code.
 #   You will exit the program by pressing the back button on the EV3 brick (button just below the screen).
@@ -101,6 +101,33 @@ def main():
         if btn.backspace:
             break
         time.sleep(0.01)  # Best practice to have a short delay to avoid working too hard between loop iterations.
+
+        if btn.up:
+            print("up")
+            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
+            ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
+        time.sleep(0.01)
+
+        if btn.left:
+            print("left")
+            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
+            ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
+        time.sleep(0.01)
+
+        if btn.right:
+            print("right")
+            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
+            ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
+        time.sleep(0.01)
+
+        if btn.down:
+            current_color_index += 1
+            ev3.Leds.set_color(ev3.Leds.LEFT, led_colors[current_color_index])
+            ev3.Leds.set_color(ev3.Leds.RIGHT, led_colors[current_color_index])
+            if current_color_index == 3:
+                current_color_index = 0
+
+        time.sleep(0.01)
 
     # Best practice to leave the LEDs on after you finish a program so you don't put away the robot while still on.
     ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
