@@ -24,8 +24,11 @@ class Snatch3r(object):
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         self.touch_sensor = ev3.TouchSensor()
+        self.btn = ev3.Button()
+        self.Leds = ev3.Leds
+
         assert self.arm_motor.connected
-        assert self.touch_sensor
+        assert self.touch_sensor.connected
         assert self.left_motor.connected
         assert self.right_motor.connected
 
@@ -46,6 +49,7 @@ class Snatch3r(object):
         self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
 
     def arm_calibration(self):
+        # Moves the robot arm up to highest position, then back down to lowest position
         self.arm_motor.run_forever(speed_sp=900)
         while not self.touch_sensor.is_pressed:
             time.sleep(0.01)
@@ -58,6 +62,7 @@ class Snatch3r(object):
         self.arm_motor.position = 0
 
     def arm_up(self):
+        # Moves the robot arm up to the highest position
         self.arm_motor.run_forever(speed_sp=900)
         while not self.touch_sensor.is_pressed:
             time.sleep(0.01)
@@ -65,6 +70,15 @@ class Snatch3r(object):
         ev3.Sound.beep()
 
     def arm_down(self):
+        # Moves the robot arm down to the lowest position
         self.arm_motor.run_to_abs_pos(position_sp=0)
         self.arm_motor.wait_while(ev3.Motor.STATE_RUNNING)
         ev3.Sound.beep()
+
+    def shutdown(self):
+        self.left_motor.stop_action = ev3.Motor.STOP_ACTION_BRAKE
+        self.right_motor.stop_action = ev3.Motor.STOP_ACTION_BRAKE
+        self.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
+        self.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
+        print("Goodbye")
+        ev3.Sound.speak("Goodbye").wait()
