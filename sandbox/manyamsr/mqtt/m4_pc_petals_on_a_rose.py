@@ -15,8 +15,8 @@ number of dice to help you figure out the pattern more quickly.
 
 To check off this part of the assignment win the game (without looking at the EV3 code).
 
-Authors: David Fisher and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher and Sreekar Manyam.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import tkinter
 from tkinter import ttk
@@ -24,19 +24,25 @@ from tkinter import ttk
 import mqtt_remote_method_calls as com
 
 
-# TODO: 2. Create a class. Feel free to call it MyDelegate.
+# DONE: 2. Create a class. Feel free to call it MyDelegate.
 # Within that class you don't even need an __init__ constructor (an empty constructor comes for free)
+class MyDelegate(object):
 
-# TODO: 3. Create a method named guess_response within MyDelegate.
-# guess_response needs to receive self and a string, feel free to call the string parameter message_from_ev3
-# within the body of the method print message_from_ev3.  That's it.  You simply need to hear what EV3 tells you.
+    # DONE: 3. Create a method named guess_response within MyDelegate.
+    # guess_response needs to receive self and a string, feel free to call the string parameter message_from_ev3
+    # within the body of the method print message_from_ev3.  That's it.  You simply need to hear what EV3 tells you.
+
+    def guess_response(self, message_from_ev3):
+        print(message_from_ev3)
 
 
 def main():
-    # TODO: 4. Create a my_delegate object from your MyDelegate class
+    # DONE: 4. Create a my_delegate object from your MyDelegate class
     # Create an mqtt_client object from the com.MqttClient class passing in my_delegate
     # connect_to_ev3
-
+    my_delegate = MyDelegate()
+    mqtt_client = com.MqttClient(my_delegate)
+    mqtt_client.connect_to_ev3()
     root = tkinter.Tk()
     root.title("Petals on a Rose")
 

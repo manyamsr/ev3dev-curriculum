@@ -145,11 +145,12 @@ class MqttClient(object):
         self.subscription_topic_name = None
         self.publish_topic_name = None
 
-    def connect_to_ev3(self, mqtt_broker_ip_address="mosquitto.csse.rose-hulman.edu", lego_robot_number=LEGO_NUMBER):
+    def connect_to_ev3(self, mqtt_broker_ip_address="broker.mqttdashboard.com", lego_robot_number=LEGO_NUMBER):
         """
         Code running on the PC should use this command to connect to the EV3 robot.
         Connects to the MQTT broker and begins listening for messages from the EV3.
-
+        mosquitto.csse.rose-hulman.edu
+        broker.mqttdashboard.com
         Notice that the mqtt_broker_ip_address and lego_robot_number are optional (usually not set).
 
         Type hints:
@@ -158,7 +159,7 @@ class MqttClient(object):
         """
         self.connect("msg4pc", "msg4ev3", mqtt_broker_ip_address, lego_robot_number)
 
-    def connect_to_pc(self, mqtt_broker_ip_address="mosquitto.csse.rose-hulman.edu", lego_robot_number=LEGO_NUMBER):
+    def connect_to_pc(self, mqtt_broker_ip_address="broker.mqttdashboard.com", lego_robot_number=LEGO_NUMBER):
         """
         Code running on the EV3 should use this command to connect to the student PC.
         Connects to the MQTT broker and begins listening for messages from the PC.
@@ -172,7 +173,7 @@ class MqttClient(object):
         self.connect("msg4ev3", "msg4pc", mqtt_broker_ip_address, lego_robot_number)
 
     def connect(self, subscription_suffix, publish_suffix,
-                mqtt_broker_ip_address="mosquitto.csse.rose-hulman.edu", lego_robot_number=LEGO_NUMBER):
+                mqtt_broker_ip_address="broker.mqttdashboard.com", lego_robot_number=LEGO_NUMBER):
         """
         Connect this MQTT client to the broker, note that connect_to_ev3 and connect_to_pc call this method.
         This connect method is the most generic allowing callers to set the subscription and publish topics.
