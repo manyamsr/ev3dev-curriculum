@@ -15,8 +15,8 @@ number of dice to help you figure out the pattern more quickly.
 
 To check off this part of the assignment win the game (without looking at the EV3 code).
 
-Authors: David Fisher and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher and Ethan Baker.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import tkinter
 from tkinter import ttk
@@ -26,6 +26,9 @@ import mqtt_remote_method_calls as com
 
 # TODO: 2. Create a class. Feel free to call it MyDelegate.
 # Within that class you don't even need an __init__ constructor (an empty constructor comes for free)
+
+# class MyDelegate(object):
+
 
 # TODO: 3. Create a method named guess_response within MyDelegate.
 # guess_response needs to receive self and a string, feel free to call the string parameter message_from_ev3
