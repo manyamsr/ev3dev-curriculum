@@ -80,20 +80,22 @@ def main():
 
 def guess(mqtt_client, number_to_guess_entry):
     """ Calls a method on EV3 called 'guess' passing in an int from the number_to_guess_entry. """
-    # TODO: 5. Uncomment the line of code below to make guesses with EV3.
-    # mqtt_client.send_message("guess", [int(number_to_guess_entry.get())])
+    # DONE: 5. Uncomment the line of code below to make guesses with EV3.
+    mqtt_client.send_message("guess", [int(number_to_guess_entry.get())])
     number_to_guess_entry.delete(0, 'end')
     # Note: You can play the game with only TO DO 5 complete, but it will be easier to solve if you do TO DO 6 as well.
 
 
 def set_num_dice(mqtt_client, num_dice_entry):
     """ Calls a method on EV3 called 'set_number_of_dice' passing in an int from the num_dice_entry. """
-    # TODO: 6. Write the line of code necessary to implement this method based on the doc string's description.
-
+    # DONE: 6. Write the line of code necessary to implement this method based on the doc string's description.
+    mqtt_client.set_number_of_dice(num_dice_entry)
 
 # TODO: 7. See if you can solve the mystery.  Based on the dice how can you solve Petals on a Rose?
 # To check off this part of the assignment figure out the pattern and win the game (without looking at the EV3 code).
-
+# Even dice numbers have no value. 1 also has no value.
+# Odd dice numbers greater than 1 have a value equal to the number on the dice minus 1.
+# Sum the values from each dice to get the total value which is the number you guess.
 
 def quit_program(mqtt_client, shutdown_ev3):
     if shutdown_ev3:
