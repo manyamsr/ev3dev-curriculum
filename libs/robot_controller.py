@@ -27,11 +27,13 @@ class Snatch3r(object):
         self.btn = ev3.Button()
         self.Leds = ev3.Leds
         self.running = True
+        self.color_sensor = ev3.ColorSensor()
 
         assert self.arm_motor.connected
         assert self.touch_sensor.connected
         assert self.left_motor.connected
         assert self.right_motor.connected
+        assert self.color_sensor
 
     def drive_inches(self, inches_target, speed_deg_per_second):
         # Make the robot to go to certain position with certain speed
