@@ -25,8 +25,8 @@
     -- Pressing the Back button will allow your program to end.  It should stop motors, turn on both green LEDs, and
        then print and say Goodbye.  You will need to implement a new robot method called shutdown to handle this task.
 
-Authors: David Fisher and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher and Ethan Baker.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import ev3dev.ev3 as ev3
 import time
@@ -34,7 +34,7 @@ import time
 import robot_controller as robo
 
 # Note that todo2 is farther down in the code.  That method needs to be written before you do todo3.
-# TODO: 3. Have someone on your team run this program on the EV3 and make sure everyone understands the code.
+# DONE: 3. Have someone on your team run this program on the EV3 and make sure everyone understands the code.
 # Can you see what the robot does and explain what each line of code is doing? Talk as a group to make sure.
 
 
@@ -52,13 +52,13 @@ def main():
     print(" - Use IR remote channel 2 to for the arm")
     print(" - Press the Back button on EV3 to exit")
     print("--------------------------------------------")
-    ev3.Sound.speak("I R Remote")
+    ev3.Sound.speak("I R Remote").wait()
 
     ev3.Leds.all_off()  # Turn the leds off
     robot = robo.Snatch3r()
     dc = DataContainer()
 
-    # TODO: 4. Add the necessary IR handler callbacks as per the instructions above.
+    # DONE: 4. Add the necessary IR handler callbacks as per the instructions above.
     # Remote control channel 1 is for driving the crawler tracks around (none of these functions exist yet below).
     # Remote control channel 2 is for moving the arm up and down (all of these functions already exist below).
 
@@ -67,13 +67,23 @@ def main():
     btn.on_backspace = lambda state: handle_shutdown(state, dc)
 
     robot.arm_calibration()  # Start with an arm calibration in this program.
-
+    rc1 = ev3.RemoteControl(channel=1)
+    rc2 = ev3.RemoteControl(channel=2)
+    rc1.on_red_up = lambda state: handle_red_up_1(state, robot)
+    rc1.on_red_down = lambda state: handle_red_down_1(state, robot)
+    rc1.on_blue_up = lambda state: handle_blue_up_1(state, robot)
+    rc1.on_blue_down = lambda state: handle_blue_down_1(state, robot)
+    rc2.on_red_up = lambda state: handle_arm_up_button(state, robot)
+    rc2.on_red_down = lambda state: handle_arm_down_button(state, robot)
+    rc2.on_blue_up = lambda state: handle_calibrate_button(state, robot)
     while dc.running:
-        # TODO: 5. Process the RemoteControl objects.
+        # DONE: 5. Process the RemoteControl objects.
+        rc1.process()
+        rc2.process()
         btn.process()
         time.sleep(0.01)
 
-    # TODO: 2. Have everyone talk about this problem together then pick one  member to modify libs/robot_controller.py
+    # DONE: 2. Have everyone talk about this problem together then pick one  member to modify libs/robot_controller.py
     # as necessary to implement the method below as per the instructions in the opening doc string. Once the code has
     # been tested and shown to work, then have that person commit their work.  All other team members need to do a
     # VCS --> Update project...
@@ -85,9 +95,76 @@ def main():
 # Some event handlers have been written for you (ones for the arm).
 # Movement event handlers have not been provided.
 # ----------------------------------------------------------------------
-# TODO: 6. Implement the IR handler callbacks handlers.
+# DONE: 6. Implement the IR handler callbacks handlers.
+# ----------------------------------------------------------------------
+# IR Remote callbacks
+# ----------------------------------------------------------------------
 
-# TODO: 7. When your program is complete, call over a TA or instructor to sign your checkoff sheet and do a code review.
+
+def handle_red_up_1(button_state, robot):
+    """
+    Handle IR event.
+
+    Type hints:
+      :type button_state: bool
+      :type robot: Snatch3r
+    """
+    if button_state:
+        robot.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
+        robot.left_motor.run_forever(speed_sp=600)
+    else:
+        robot.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
+        robot.left_motor.stop()
+
+
+def handle_red_down_1(button_state, robot):
+    """
+    Handle IR event.
+
+    Type hints:
+      :type button_state: bool
+      :type robot: Snatch3r
+    """
+    if button_state:
+        robot.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
+        robot.left_motor.run_forever(speed_sp=-600)
+    else:
+        robot.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
+        robot.left_motor.stop()
+
+
+def handle_blue_up_1(button_state, robot):
+    """
+    Handle IR event.
+
+    Type hints:
+      :type button_state: bool
+      :type robot: Snatch3r
+    """
+    if button_state:
+        robot.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
+        robot.right_motor.run_forever(speed_sp=600)
+    else:
+        robot.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
+        robot.right_motor.stop()
+
+
+def handle_blue_down_1(button_state, robot):
+    """
+    Handle IR event.
+
+    Type hints:
+      :type button_state: bool
+      :type robot: Snatch3r
+    """
+    if button_state:
+        robot.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
+        robot.right_motor.run_forever(speed_sp=-600)
+    else:
+        robot.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
+        robot.right_motor.stop()
+
+# DONE: 7. When your program is complete, call over a TA or instructor to sign your checkoff sheet and do a code review.
 #
 # Observations you should make, IR buttons are a fun way to control the robot.
 
@@ -138,6 +215,7 @@ def handle_shutdown(button_state, dc):
     """
     if button_state:
         dc.running = False
+
 
 # ----------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
