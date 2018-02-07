@@ -26,8 +26,9 @@ class Snatch3r(object):
         self.touch_sensor = ev3.TouchSensor()
         self.btn = ev3.Button()
         self.Leds = ev3.Leds
-        self.running = True
+        self.color_sensor = ev3.ColorSensor()
 
+        assert self.color_sensor
         assert self.arm_motor.connected
         assert self.touch_sensor.connected
         assert self.left_motor.connected
@@ -77,44 +78,9 @@ class Snatch3r(object):
         ev3.Sound.beep()
 
     def shutdown(self):
-        self.running = False
         self.left_motor.stop_action = ev3.Motor.STOP_ACTION_BRAKE
         self.right_motor.stop_action = ev3.Motor.STOP_ACTION_BRAKE
         self.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
         self.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
         print("Goodbye")
         ev3.Sound.speak("Goodbye").wait()
-
-    def loop_forever(self):
-        # This is a convenience method that I don't really recommend for most programs other than m5.
-        #   This method is only useful if the only input to the robot is coming via mqtt.
-        #   MQTT messages will still call methods, but no other input or output happens.
-        # This method is given here since the concept might be confusing.
-        self.running = True
-        while self.running:
-            time.sleep(0.1)  # Do nothing (except receive MQTT messages) until an MQTT message calls shutdown.
-
-    # Drives forward
-    def forward(self, left_speed, right_speed):
-        self.left_motor.run_forever(speed_sp=left_speed)
-        self.right_motor.run_forever(speed_sp=right_speed)
-
-    # Drives backward
-    def backward(self, left_speed, right_speed):
-        self.left_motor.run_forever(speed_sp=-left_speed)
-        self.right_motor.run_forever(speed_sp=-right_speed)
-
-    # Turns left
-    def left(self, left_speed, right_speed):
-        self.left_motor.run_forever(speed_sp=-left_speed)
-        self.right_motor.run_forever(speed_sp=right_speed)
-
-    # Turns right
-    def right(self, left_speed, right_speed):
-        self.left_motor.run_forever(speed_sp=left_speed)
-        self.right_motor.run_forever(speed_sp=-right_speed)
-
-    # Stops the motors
-    def stop(self):
-        self.left_motor.stop()
-        self.right_motor.stop()
