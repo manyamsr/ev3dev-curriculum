@@ -19,7 +19,7 @@ class Snatch3r(object):
     """Commands for the Snatch3r robot that might be useful in many different programs."""
     
     def __init__(self):
-        # Construct the robot
+        # Constructs the robot
         self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
@@ -29,13 +29,16 @@ class Snatch3r(object):
         self.running = True
         self.color_sensor = ev3.ColorSensor()
         self.ir_sensor = ev3.InfraredSensor()
+        self.pixy = ev3.Sensor(driver_name="pixy-lego")
 
+        # Checks to make sure everything is connected
         assert self.arm_motor.connected
         assert self.touch_sensor.connected
         assert self.left_motor.connected
         assert self.right_motor.connected
         assert self.color_sensor
         assert self.ir_sensor
+        assert self.pixy
 
     def drive_inches(self, inches_target, speed_deg_per_second):
         # Make the robot to go to certain position with certain speed
@@ -81,6 +84,7 @@ class Snatch3r(object):
         ev3.Sound.beep()
 
     def shutdown(self):
+        # Stops the robot, sets both Leds to green, prints and says Goodbye
         self.running = False
         self.left_motor.stop_action = ev3.Motor.STOP_ACTION_BRAKE
         self.right_motor.stop_action = ev3.Motor.STOP_ACTION_BRAKE
@@ -98,28 +102,28 @@ class Snatch3r(object):
         while self.running:
             time.sleep(0.1)  # Do nothing (except receive MQTT messages) until an MQTT message calls shutdown.
 
-    # Drives forward
     def forward(self, left_speed, right_speed):
+        # Drives forward forever
         self.left_motor.run_forever(speed_sp=left_speed)
         self.right_motor.run_forever(speed_sp=right_speed)
 
-    # Drives backward
     def backward(self, left_speed, right_speed):
+        # Drives backward forever
         self.left_motor.run_forever(speed_sp=-left_speed)
         self.right_motor.run_forever(speed_sp=-right_speed)
 
-    # Turns left
     def left(self, left_speed, right_speed):
+        # Spins the robot left
         self.left_motor.run_forever(speed_sp=-left_speed)
         self.right_motor.run_forever(speed_sp=right_speed)
 
-    # Turns right
     def right(self, left_speed, right_speed):
+        # Spins the robot right
         self.left_motor.run_forever(speed_sp=left_speed)
         self.right_motor.run_forever(speed_sp=-right_speed)
 
-    # Stops the motors
     def stop(self):
+        # Stops both motors
         self.left_motor.stop()
         self.right_motor.stop()
 
