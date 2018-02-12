@@ -13,6 +13,7 @@
 
 import ev3dev.ev3 as ev3
 import time
+import math
 
 
 class Snatch3r(object):
@@ -36,9 +37,9 @@ class Snatch3r(object):
         assert self.touch_sensor.connected
         assert self.left_motor.connected
         assert self.right_motor.connected
-        assert self.color_sensor
-        assert self.ir_sensor
-        assert self.pixy
+        assert self.color_sensor.connected
+        assert self.ir_sensor.connected
+        assert self.pixy.connected
 
     def drive_inches(self, inches_target, speed_deg_per_second):
         # Make the robot to go to certain position with certain speed
@@ -127,3 +128,70 @@ class Snatch3r(object):
         self.left_motor.stop()
         self.right_motor.stop()
 
+    def seek_beacon(self):
+        """
+        Uses the IR Sensor in BeaconSeeker mode to find the beacon.  If the beacon is found this return True.
+        If the beacon is not found and the attempt is cancelled by hitting the touch sensor, return False.
+
+        """
+
+        # Create a BeaconSeeker object on channel 1.
+
+        forward_speed = 300
+        turn_speed = 100
+        beacon_seeker = ev3.BeaconSeeker(sensor=self.ir_sensor, channel=1)
+
+        while not self.touch_sensor.is_pressed:
+            # The touch sensor can be used to abort the attempt (sometimes handy during testing)
+
+            # Use the beacon_seeker object to get the current heading and distance.
+            current_heading = beacon_seeker.heading  # use the beacon_seeker heading
+            current_distance = beacon_seeker.distance  # use the beacon_seeker distance
+            if current_distance == -128:
+                print("IR Remote not found. Distance is -128")
+                while current_distance == -128:
+                    self.left(turn_speed, turn_speed)
+            else:
+                # Implement the following strategy to find the beacon.
+                # If the absolute value of the current_heading is less than 2, you are on the right heading.
+                #     If the current_distance is 0 return from this function, you have found the beacon!  return True
+                #     If the current_distance is greater than 0 drive straight forward (forward_speed, forward_speed)
+                # If the absolute value of the current_heading is NOT less than 2 but IS less than 10, you need to spin
+                #     If the current_heading is less than 0 turn left (-turn_speed, turn_speed)
+                #     If the current_heading is greater than 0 turn right  (turn_speed, -turn_speed)
+                # If the absolute value of current_heading is greater than 10, then stop and print Heading too far off
+                #
+                # It is recommended that you always print
+                # something each pass through the loop to help you debug what is going on.  Examples:
+                #    print("On the right heading. Distance: ", current_distance)
+                #    print("Adjusting heading: ", current_heading)
+                #    print("Heading is too far off to fix: ", current_heading)
+
+                # Here is some code to help get you started
+                if math.fabs(current_heading) < 2:
+                    # Close enough of a heading to move forward
+                    print("On the right heading. Distance: ", current_distance)
+                    # You add more!
+                    if current_distance == 0:
+                        time.sleep(1)
+                        self.stop()
+                        return True
+                    else:
+                        self.forward(forward_speed, forward_speed)
+                elif 2 <= math.fabs(current_heading) <= 10:
+                    print("Adjusting heading: ", current_heading)
+                    if current_heading < 0:
+                        self.left(turn_speed, turn_speed)
+                    elif current_heading > 0:
+                        self.right(turn_speed, turn_speed)
+                else:
+                    print("Heading too far off to fix: ", current_heading)
+                    while math.fabs(current_heading) > 10:
+                        self.right(turn_speed, turn_speed)
+                        print("current heading = ", current_heading)
+            time.sleep(0.02)
+
+        # The touch_sensor was pressed to abort the attempt if this code runs.
+        print("Abandon ship!")
+        self.stop()
+        return False
