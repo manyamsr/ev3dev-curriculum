@@ -62,7 +62,7 @@ def seek_beacon(robot):
 
     forward_speed = 300
     turn_speed = 100
-    beacon_seeker = ev3.BeaconSeeker(sensor=robot.ir_sensor, channel=2)
+    beacon_seeker = ev3.BeaconSeeker(sensor=robot.ir_sensor, channel=1)
 
     while not robot.touch_sensor.is_pressed:
         # The touch sensor can be used to abort the attempt (sometimes handy during testing)
@@ -100,7 +100,7 @@ def seek_beacon(robot):
                     return True
                 else:
                     robot.forward(forward_speed, forward_speed)
-            elif 2 <= math.fabs(current_heading) < 10:
+            elif 2 <= math.fabs(current_heading) <= 10:
                 print("Adjusting heading: ", current_heading)
                 if current_heading < 0:
                     robot.left(turn_speed, turn_speed)
@@ -109,7 +109,7 @@ def seek_beacon(robot):
             else:
                 robot.stop()
                 print("Heading too far off to fix: ", current_heading)
-        time.sleep(0.01)
+        time.sleep(0.02)
 
     # The touch_sensor was pressed to abort the attempt if this code runs.
     print("Abandon ship!")
