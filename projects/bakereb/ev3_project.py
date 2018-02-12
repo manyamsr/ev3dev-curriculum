@@ -6,5 +6,9 @@
     The theme is Terminator. The robot (i.e. the terminator) is trying to capture John Connor (i.e. the Beacon), and
     your job is to try and prevent this from happening by hacking into the Terminator's mainframe and drive it away
     using keyboard inputs. Once hacked, you will have a limited amount of time to try and drive the robot to cross a
-    line of a certain color, which will activate the EMP and deactivate the 
+    line of a certain color, which will activate the EMP and destroy the Terminator. However, if you fail, then the
+    Terminator will capture John Connor and you will lose. This creates alternate endings depending on the player's
+    ability to "hack" into the robot.
+
+
 """
