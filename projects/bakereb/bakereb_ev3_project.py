@@ -21,23 +21,34 @@ import robot_controller as robo
 import mqtt_remote_method_calls as com
 
 
-def main():
+def title_screen():
     root = tkinter.Tk()
     root.title("Title Screen")
-    root.geometry("1280x720")
+    # root.geometry("1050x720")
 
-    main_frame = ttk.Frame(root, padding=200)
+    main_frame = ttk.Frame(root, padding=10)
     main_frame.grid()
 
     main_photo = tkinter.PhotoImage(file='Terminator_logo.gif')
 
     frame_title_1 = ttk.Label(main_frame, image=main_photo)
     frame_title_1.image = main_photo
-    frame_title_1.grid()
+    frame_title_1.grid(row=1, column=2)
 
-    
+    frame_title_3 = ttk.Button(main_frame, text="Begin")
+    frame_title_3.grid(row=2, column=2)
+
+    frame_title_2 = ttk.Button(main_frame, text="Information")
+    frame_title_2.grid(row=3, column=2)
+
+    frame_title_2 = ttk.Button(main_frame, text="Quit")
+    frame_title_2.grid(row=4, column=2)
+
+
+
+
 
     root.mainloop()
 
 
-main()
+title_screen()
