@@ -10,5 +10,21 @@
     Terminator will capture John Connor and you will lose. This creates alternate endings depending on the player's
     ability to "hack" into the robot.
 
-
+Author: Ethan Baker
 """
+import ev3dev.ev3 as ev3
+import time
+import math
+import tkinter
+from tkinter import ttk
+import robot_controller as robo
+import mqtt_remote_method_calls as com
+
+def main():
+    root = tkinter.Tk()
+    root.title("Title Screen")
+
+    frame1 = ttk.Frame(root, padding=200)
+    frame1.grid()
+
+main()
