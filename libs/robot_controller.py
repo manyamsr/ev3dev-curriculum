@@ -14,6 +14,7 @@
 import ev3dev.ev3 as ev3
 import time
 import math
+import mqtt_remote_method_calls as com
 
 
 class Snatch3r(object):
@@ -195,3 +196,30 @@ class Snatch3r(object):
         print("Abandon ship!")
         self.stop()
         return False
+
+    def auto_drive(self):
+        mqtt_client = com.MqttClient(self)
+        mqtt_client.connect_to_pc()
+        while not self.touch_sensor.is_pressed:
+            self.forward(200, 200)
+            time.sleep(0.1)
+
+            if self.color_sensor.color == 6:
+                self.turn_degrees(180, turn_speed_sp= 200)
+                time.sleep(0.5)
+                ev3.Sound.speak('object found')
+                self.forward(200, 200)
+                time.sleep(0.1)
+                break
+            if self.color_sensor.color == 3:
+                self.turn_degrees(90, turn_speed_sp= 200)
+                time.sleep(0.5)
+                ev3.Sound.speak('Turning left')
+                self.forward(200, 200)
+                time.sleep(0.1)
+                break
+        self.stop()
+        ev3.Sound.speak('Goodbye')
+        self.stop()
+
+    
