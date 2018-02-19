@@ -222,4 +222,12 @@ class Snatch3r(object):
         ev3.Sound.speak('Goodbye')
         self.stop()
 
-    
+    def line_follow(self, color):
+        while not self.touch_sensor.is_pressed:
+            time.sleep(0.01)
+            self.left_motor.run_forever(speed_sp=300)
+            self.right_motor.run_forever(speed_sp=300)
+            while self.color_sensor.color == color:
+                time.sleep(0.01)
+            self.right(300, 300)
+        self.stop()
