@@ -73,7 +73,7 @@ class Snatch3r(object):
 
     def arm_up(self):
         # Moves the robot arm up to the highest position
-        self.arm_motor.run_forever(speed_sp=900)
+        self.arm_motor.run_forever(speed_sp=600)
         while not self.touch_sensor.is_pressed:
             time.sleep(0.01)
         self.arm_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
@@ -222,12 +222,22 @@ class Snatch3r(object):
         ev3.Sound.speak('Goodbye')
         self.stop()
 
-    def line_follow(self, color):
+    def line_follow(self, start_color, end_color):
         while not self.touch_sensor.is_pressed:
             time.sleep(0.01)
             self.left_motor.run_forever(speed_sp=300)
             self.right_motor.run_forever(speed_sp=300)
-            while self.color_sensor.color == color:
+            while self.color_sensor.color == start_color:
                 time.sleep(0.01)
             self.right(300, 300)
+            if self.color_sensor.color == end_color:
+                break
         self.stop()
+
+    def drive_to_color(self, color_to_seek):
+            self.left_motor.run_forever(speed_sp=300)
+            self.right_motor.run_forever(speed_sp=300)
+            while self.color_sensor.color is not color_to_seek:
+                time.sleep(0.01)
+            self.left_motor.stop()
+            self.right_motor.stop()

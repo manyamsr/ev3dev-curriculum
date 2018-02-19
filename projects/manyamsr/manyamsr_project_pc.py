@@ -7,6 +7,9 @@ import math
 import time
 import ev3dev.ev3 as ev3
 import robot_controller as robo
+variable1= 0
+variable2= 0
+variable3= 0
 
 
 class MyDelegateOnThePc(object):
@@ -26,35 +29,34 @@ def main():
     mqtt_client.connect_to_ev3()
 
     root = tkinter.Tk()
-    root.title("Space Ship")
+    root.title("Space Ship Controls")
 
     main_frame = ttk.Frame(root, padding=20, relief='raised')
     main_frame.grid()
 
-    orbit_button = ttk.Button(main_frame, text="Orbit Earth")
-    orbit_button.grid(row=2, column=1)
-    orbit_button['command'] = lambda: send_orbit(mqtt_client, left_speed_entry, right_speed_entry)
-    root.bind('<o>', lambda event: send_forward(mqtt_client, left_speed_entry, right_speed_entry))
+    orbit_earth_button = ttk.Button(main_frame, text="Orbit Earth")
+    orbit_earth_button.grid(row=2, column=1)
+    orbit_earth_button['command'] = lambda: send_orbit_earth(mqtt_client, ev3.ColorSensor.COLOR_BLUE,
+                                                             ev3.ColorSensor.COLOR_BLACK)
+    root.bind('<o>', lambda event: send_orbit_earth(mqtt_client, ev3.ColorSensor.COLOR_BLUE,
+                                                    ev3.ColorSensor.COLOR_BLACK))
 
     travel_button = ttk.Button(main_frame, text="Travel to Mars")
     travel_button.grid(row=3, column=0)
-    travel_button['command'] = lambda: send_left(mqtt_client, left_speed_entry, right_speed_entry)
-    root.bind('<Left>', lambda event: send_left(mqtt_client, left_speed_entry, right_speed_entry))
+    travel_button['command'] = lambda: send_travel(mqtt_client, ev3.ColorSensor.COLOR_BLACK,
+                                                   ev3.ColorSensor.COLOR_RED)
+    root.bind('<t>', lambda event: send_travel(mqtt_client, ev3.ColorSensor.COLOR_BLACK,
+                                               ev3.ColorSensor.COLOR_RED))
 
-    stop_button = ttk.Button(main_frame, text="Stop")
-    stop_button.grid(row=3, column=1)
-    stop_button['command'] = lambda: send_stop(mqtt_client)
-    root.bind('<s>', lambda event: send_stop(mqtt_client))
+    find_probe_button = ttk.Radiobutton(main_frame, text="Find Probe", variable=variable3, value=4)
+    find_probe_button.grid(row=5, column=0)
+    find_probe_button['command'] = lambda: send_find_probe(mqtt_client)
+    root.bind('<f>', lambda event: send_find_probe(mqtt_client))
 
-    up_button = ttk.Radiobutton(main_frame, text="Find Probe", variable=variable3, value=4)
-    up_button.grid(row=5, column=0)
-    up_button['command'] = lambda: send_up(mqtt_client)
-    root.bind('<u>', lambda event: send_up(mqtt_client))
-
-    down_button = ttk.Radiobutton(main_frame, text="Return to Mars", variable=variable3, value=5)
-    down_button.grid(row=6, column=0)
-    down_button['command'] = lambda: send_down(mqtt_client)
-    root.bind('<j>', lambda event: send_down(mqtt_client))
+    return_button = ttk.Radiobutton(main_frame, text="Return to Mars", variable=variable3, value=5)
+    return_button.grid(row=6, column=0)
+    return_button['command'] = lambda: send_return(mqtt_client, ev3.ColorSensor.COLOR_RED)
+    root.bind('<r>', lambda event: send_return(mqtt_client))
 
     q_button = ttk.Button(main_frame, text="Quit")
     q_button.grid(row=5, column=2)
@@ -69,33 +71,25 @@ def main():
     root.mainloop()
 
 
-def f1(mqtt_client):
-    mqtt_client.send_message('stop')
-
-
-def send_orbit(mqtt_client, color):
+def send_orbit_earth(mqtt_client, start_color, end_color):
     print("Orbiting the Earth")
-    mqtt_client.send_message("line_follow", [2])
+    ev3.Sound.speak("Now Orbiting the Earth")
+    mqtt_client.send_message("line_follow", [start_color, end_color])
 
 
-def send_backward(mqtt_client, left_speed_entry, right_speed_entry):
-    print("backward")
-    mqtt_client.send_message("backward", [int(left_speed_entry.get()), int(right_speed_entry.get())])
+def send_travel(mqtt_client, start_color, end_color):
+    print("Traveling to Mars")
+    mqtt_client.send_message("line_follow", [start_color, end_color])
 
 
-def send_left(mqtt_client, left_speed_entry, right_speed_entry):
-    print("left")
-    mqtt_client.send_message("left", [int(left_speed_entry.get()), int(right_speed_entry.get())])
+def send_find_probe(mqtt_client):
+    print("Locating Probe")
+    mqtt_client.send_message("seek_beacon")
 
 
-def send_right(mqtt_client, left_speed_entry, right_speed_entry):
-    print("right")
-    mqtt_client.send_message("right", [int(left_speed_entry.get()), int(right_speed_entry.get())])
-
-
-def send_stop(mqtt_client):
-    print("stop")
-    mqtt_client.send_message("stop")
+def send_return(mqtt_client):
+    print("Locating Probe")
+    mqtt_client.send_message("seek_beacon")
 
 
 def quit_program(mqtt_client, shutdown_ev3):
