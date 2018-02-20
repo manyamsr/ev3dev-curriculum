@@ -138,7 +138,7 @@ class Snatch3r(object):
 
         # Create a BeaconSeeker object on channel 1.
 
-        forward_speed = 200
+        forward_speed = 300
         turn_speed = 100
         beacon_seeker = ev3.BeaconSeeker(sensor=self.ir_sensor, channel=1)
 
@@ -174,7 +174,7 @@ class Snatch3r(object):
                     print("On the right heading. Distance: ", current_distance)
                     # You add more!
                     if current_distance == 0:
-                        time.sleep(1)
+                        time.sleep(3)
                         self.stop()
                         return True
                     else:

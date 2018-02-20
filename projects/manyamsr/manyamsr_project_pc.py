@@ -117,6 +117,7 @@ def send_return(mqtt_client, color_to_seek, degrees, turn_speed):
     mqtt_client.send_message("turn_degrees", [degrees, turn_speed])
     mqtt_client.send_message("drive_to_color", [color_to_seek])
     mqtt_client.send_message("arm_down")
+    mqtt_client.send_message("speak", ["Mission Successful"])
     print("Mission Successful")
 
 
