@@ -41,12 +41,17 @@ def main():
     root.bind('<o>', lambda event: send_orbit_earth(mqtt_client, ev3.ColorSensor.COLOR_BLUE,
                                                     ev3.ColorSensor.COLOR_BLACK))
 
-    travel_button = ttk.Button(main_frame, text="Travel to Mars")
-    travel_button.grid(row=3, column=0)
-    travel_button['command'] = lambda: send_travel(mqtt_client, ev3.ColorSensor.COLOR_BLACK,
-                                                   ev3.ColorSensor.COLOR_RED)
-    root.bind('<t>', lambda event: send_travel(mqtt_client, ev3.ColorSensor.COLOR_BLACK,
-                                               ev3.ColorSensor.COLOR_RED))
+    # travel_earth_button = ttk.Button(main_frame, text="Travel to Earth")
+    # travel_earth_button.grid(row=2, column=1)
+    # travel_earth_button['command'] = lambda: send_travel_earth(mqtt_client, ev3.ColorSensor.COLOR_BLACK)
+    # root.bind('<o>', lambda event: send_travel_earth(mqtt_client, ev3.ColorSensor.COLOR_BLACK))
+
+    travel_mars_button = ttk.Button(main_frame, text="Travel to Mars")
+    travel_mars_button.grid(row=3, column=0)
+    travel_mars_button['command'] = lambda: send_travel_mars(mqtt_client, ev3.ColorSensor.COLOR_BLACK,
+                                                             ev3.ColorSensor.COLOR_RED)
+    root.bind('<t>', lambda event: send_travel_mars(mqtt_client, ev3.ColorSensor.COLOR_BLACK,
+                                                    ev3.ColorSensor.COLOR_RED))
 
     find_probe_button = ttk.Button(main_frame, text="Find Probe")
     find_probe_button.grid(row=5, column=0)
@@ -82,7 +87,13 @@ def send_orbit_earth(mqtt_client, start_color, end_color):
     mqtt_client.send_message("line_follow_left", [start_color, end_color])
 
 
-def send_travel(mqtt_client, start_color, end_color):
+def send_travel_earth(mqtt_client, color_to_seek):
+    print("Traveling to Earth")
+    mqtt_client.send_message("speak", ["Now traveling to Earth"])
+    mqtt_client.send_message("drive_to_color", [color_to_seek])
+
+
+def send_travel_mars(mqtt_client, start_color, end_color):
     print("Traveling to Mars")
     mqtt_client.send_message("speak", ["Now traveling to Mars"])
     mqtt_client.send_message("line_follow_right", [start_color, end_color])
