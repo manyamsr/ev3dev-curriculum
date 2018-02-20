@@ -25,7 +25,6 @@ class MyDelegateOnThePc(object):
 
 
 def main():
-    ev3.Sound.speak("This is a space mission to find the probe").wait()
     mqtt_client = com.MqttClient()
     mqtt_client.connect_to_ev3()
 
@@ -61,8 +60,8 @@ def main():
 
     return_button = ttk.Radiobutton(main_frame, text="Return to Mars", variable=variable3, value=5)
     return_button.grid(row=6, column=0)
-    return_button['command'] = lambda: send_return(mqtt_client, ev3.ColorSensor.COLOR_RED, 180, 100)
-    root.bind('<r>', lambda event: send_return(mqtt_client, ev3.ColorSensor.COLOR_RED, 180, 100))
+    return_button['command'] = lambda: send_return(mqtt_client, ev3.ColorSensor.COLOR_RED, 200, 100)
+    root.bind('<r>', lambda event: send_return(mqtt_client, ev3.ColorSensor.COLOR_RED, 200, 100))
 
     q_button = ttk.Button(main_frame, text="Quit")
     q_button.grid(row=5, column=2)
@@ -79,36 +78,35 @@ def main():
 
 def send_orbit_earth(mqtt_client, start_color, end_color):
     print("Orbiting the Earth")
-    ev3.Sound.speak("Now Orbiting the Earth").wait()
+    mqtt_client.send_message("speak", ["Now Orbiting the Earth"])
     mqtt_client.send_message("line_follow", [start_color, end_color])
 
 
 def send_travel(mqtt_client, start_color, end_color):
     print("Traveling to Mars")
-    ev3.Sound.speak("Now traveling to Mars").wait()
+    mqtt_client.send_message("speak", ["Now traveling to Mars"])
     mqtt_client.send_message("line_follow", [start_color, end_color])
 
 
 def send_find_probe(mqtt_client):
     print("Locating Probe")
-    ev3.Sound.speak("Now Locating the probe").wait()
+    mqtt_client.send_message("speak", ["Now Locating the probe"])
     mqtt_client.send_message("seek_beacon")
 
 
 def send_pickup_probe(mqtt_client):
     print("Picking up the Probe")
-    ev3.Sound.speak("Picking up the probe").wait()
+    mqtt_client.send_message("speak", ["Picking up the probe"])
     mqtt_client.send_message("arm_up")
 
 
 def send_return(mqtt_client, color_to_seek, degrees, turn_speed):
     print("Returning to Mars")
-    ev3.Sound.speak("Now Returning to Mars").wait()
+    mqtt_client.send_message("speak", ["Now Returning to Mars"])
     mqtt_client.send_message("turn_degrees", [degrees, turn_speed])
     mqtt_client.send_message("drive_to_color", [color_to_seek])
     mqtt_client.send_message("arm_down")
     print("Mission Successful")
-    ev3.Sound.speak("Mission Successful")
 
 
 def quit_program(mqtt_client, shutdown_ev3):

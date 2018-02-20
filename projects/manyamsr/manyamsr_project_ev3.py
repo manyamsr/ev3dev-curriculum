@@ -9,10 +9,12 @@ touch_sensor = ev3.TouchSensor()
 
 
 def main():
+    ev3.Sound.speak("This is a space mission").wait()
     robot = robo.Snatch3r()
     mqtt_client = com.MqttClient(robot)
     mqtt_client.connect_to_pc()
     robot.loop_forever()
+    ev3.Sound.speak("Mission Successful")
 
 
 main()

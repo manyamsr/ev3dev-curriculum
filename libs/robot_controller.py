@@ -241,3 +241,6 @@ class Snatch3r(object):
                 time.sleep(0.01)
             self.left_motor.stop()
             self.right_motor.stop()
+
+    def speak(self, string_to_speak):
+        ev3.Sound.speak(string_to_speak)
