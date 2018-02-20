@@ -199,44 +199,47 @@ def game(main_frame, root, robot):
     main_frame.destroy()
     main_frame = ttk.Frame(root, padding=50)
     main_frame.grid()
-    root.geometry('720x460')
+    root.geometry('720x200')
     state = guess_num.state
 
-    mqtt_client.send_message("seek_beacon")
+    # mqtt_client.send_message("seek_beacon")
 
     explain_frame = ttk.Label(main_frame, text='Enter the Code!')
     explain_frame.grid(row=0, column=0)
 
-    space_frame_row_1 = ttk.Label(root, text=' ')
-    space_frame_row_1.grid(row=1, column=0)
+    space_frame_row_1 = ttk.Label(root, width=5)
+    space_frame_row_1.grid(row=0, column=9)
+
+    # space_frame_row_2 = ttk.Label(root, width=5)
+    # space_frame_row_2.grid(row=0, column=1)
 
     input_button_1_1 = ttk.Button(root, text='1')
-    input_button_1_1.grid(row=2, column=1)
+    input_button_1_1.grid(row=0, column=3)
     input_button_1_1['command'] = lambda: guessing_number(guess_num, 1)
 
     input_button_1_2 = ttk.Button(root, text='2')
-    input_button_1_2.grid(row=2, column=2)
+    input_button_1_2.grid(row=0, column=4)
     input_button_1_2['command'] = lambda: guessing_number(guess_num, 2)
 
     input_button_1_3 = ttk.Button(root, text='3')
-    input_button_1_3.grid(row=2, column=3)
+    input_button_1_3.grid(row=0, column=5)
     input_button_1_3['command'] = lambda: guessing_number(guess_num, 3)
 
     number_text = guess_num.input_build
-    number_label = ttk.Label(main_frame, text=number_text)
-    number_label.grid(row=2, column=0)
+    number_label = ttk.Label(main_frame, text=number_text, background="white")
+    number_label.grid(row=0, column=2)
     guess_num.input_label = number_label
 
     reset_input_1 = ttk.Button(root, text='Reset')
-    reset_input_1.grid(row=2, column=5)
+    reset_input_1.grid(row=0, column=7)
     reset_input_1['command'] = lambda: reset_input(guess_num)
 
     test_input_1 = ttk.Button(root, text='Test')
-    test_input_1.grid(row=2, column=6)
+    test_input_1.grid(row=0, column=8)
     test_input_1['command'] = lambda: check_input(guess_num)
 
     quit_button = ttk.Button(root, text='Quit')
-    quit_button.grid(row=0, column=7)
+    quit_button.grid(row=0, column=10)
     quit_button['command'] = lambda: quit_mid_game(root, main_frame, mqtt_client)
 
     print(guess_num.answer)
@@ -366,7 +369,7 @@ def hack(guess_num, robot):
 
     def close_control_root(mqtt_client, control_root):
         mqtt_client.send_message("stop")
-        mqtt_client.send_message("seek_beacon")
+        # mqtt_client.send_message("seek_beacon")
         control_root.destroy()
 
     # ----------------------------------------------------------------------
