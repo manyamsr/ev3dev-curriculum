@@ -138,7 +138,7 @@ class Snatch3r(object):
 
         # Create a BeaconSeeker object on channel 1.
 
-        forward_speed = 300
+        forward_speed = 100
         turn_speed = 100
         beacon_seeker = ev3.BeaconSeeker(sensor=self.ir_sensor, channel=1)
 
