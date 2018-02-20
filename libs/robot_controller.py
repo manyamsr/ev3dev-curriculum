@@ -224,6 +224,7 @@ class Snatch3r(object):
 
     def line_follow_left(self, start_color, end_color):
         while not self.touch_sensor.is_pressed:
+            time.sleep(0.01)
             self.left_motor.run_forever(speed_sp=300)
             self.right_motor.run_forever(speed_sp=300)
             time.sleep(0.01)
@@ -233,22 +234,30 @@ class Snatch3r(object):
             time.sleep(0.01)
             if self.color_sensor.color == end_color:
                 break
+            # if self.color_sensor.color == ev3.ColorSensor.COLOR_YELLOW:
+            #     self.left(300, 300)
+            #     time.sleep(0.01)
+            # elif self.color_sensor.color == end_color:
+            #     break
         self.stop()
 
     def line_follow_right(self, start_color, end_color):
         while not self.touch_sensor.is_pressed:
+            time.sleep(0.01)
             self.left_motor.run_forever(speed_sp=300)
             self.right_motor.run_forever(speed_sp=300)
             time.sleep(0.01)
             while self.color_sensor.color == start_color:
                 time.sleep(0.01)
             self.right(300, 300)
-            time.sleep(1)
-            if self.color_sensor.color == ev3.ColorSensor.COLOR_YELLOW:
-                self.left(300, 300)
-                time.sleep(0.01)
-            elif self.color_sensor.color == end_color:
+            time.sleep(0.01)
+            if self.color_sensor.color == end_color:
                 break
+            # if self.color_sensor.color == ev3.ColorSensor.COLOR_YELLOW:
+            #     self.left(300, 300)
+            #     time.sleep(0.01)
+            # elif self.color_sensor.color == end_color:
+            #     break
         self.stop()
 
     def drive_to_color(self, color_to_seek):
