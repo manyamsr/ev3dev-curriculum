@@ -79,13 +79,13 @@ def main():
 def send_orbit_earth(mqtt_client, start_color, end_color):
     print("Orbiting the Earth")
     mqtt_client.send_message("speak", ["Now Orbiting the Earth"])
-    mqtt_client.send_message("line_follow", [start_color, end_color])
+    mqtt_client.send_message("line_follow_left", [start_color, end_color])
 
 
 def send_travel(mqtt_client, start_color, end_color):
     print("Traveling to Mars")
     mqtt_client.send_message("speak", ["Now traveling to Mars"])
-    mqtt_client.send_message("line_follow", [start_color, end_color])
+    mqtt_client.send_message("line_follow_right", [start_color, end_color])
 
 
 def send_find_probe(mqtt_client):

@@ -222,15 +222,43 @@ class Snatch3r(object):
         ev3.Sound.speak('Goodbye')
         self.stop()
 
-    def line_follow(self, start_color, end_color):
+    def line_follow_left(self, start_color, end_color):
+        print("we are here", start_color, end_color)
         while not self.touch_sensor.is_pressed:
-            time.sleep(0.01)
             self.left_motor.run_forever(speed_sp=300)
             self.right_motor.run_forever(speed_sp=300)
-            while self.color_sensor.color == start_color:
+            time.sleep(0.01)
+            while True:
+                c = self.color_sensor.color
+                print(c)
+                if c != start_color:
+                    break
+                time.sleep(0.01)
+            self.left(300, 300)
+            time.sleep(0.01)
+            c = self.color_sensor.color
+            print("after turning", c)
+            if c == end_color:
+                break
+        self.stop()
+
+    def line_follow_right(self, start_color, end_color):
+        print("we are here", start_color, end_color)
+        while not self.touch_sensor.is_pressed:
+            self.left_motor.run_forever(speed_sp=300)
+            self.right_motor.run_forever(speed_sp=300)
+            time.sleep(0.01)
+            while True:
+                c = self.color_sensor.color
+                print(c)
+                if c != start_color:
+                    break
                 time.sleep(0.01)
             self.right(300, 300)
-            if self.color_sensor.color == end_color:
+            time.sleep(0.01)
+            c = self.color_sensor.color
+            print("after turning", c)
+            if c == end_color:
                 break
         self.stop()
 
@@ -243,4 +271,4 @@ class Snatch3r(object):
             self.right_motor.stop()
 
     def speak(self, string_to_speak):
-        ev3.Sound.speak(string_to_speak)
+        ev3.Sound.speak(string_to_speak).wait()
