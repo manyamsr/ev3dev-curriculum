@@ -26,8 +26,7 @@ def main():
     robot = robo.Snatch3r()
     mqtt_client = com.MqttClient(robot)
     mqtt_client.connect_to_pc()
-    while not touch_sensor.is_pressed:
-        robot.loop_forever()  # Calls a function that has a while True: loop within it to avoid letting the program end.
+    robot.loop_forever()  # Calls a function that has a while True: loop within it to avoid letting the program end.
 
 
 
